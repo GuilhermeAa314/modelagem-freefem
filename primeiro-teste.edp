@@ -1,0 +1,16 @@
+border C(t=0, 2*pi){ x=cos(t); y=sin(t); }
+
+mesh Th = buildmesh(C(50));
+
+fespace Vh(Th, P1);
+Vh u, v;
+
+func f = x*y;
+
+solve poisson(u, v)
+    = int2d(Th)( dx(u)*dx(v) + dy(u)*dy(v) )
+    - int2d(Th)( f*v )
+    + on(C, u=0);
+
+plot(Th, wait=1, cmm="The Mesh");
+plot(u, fill=1, value=1, wait=1, cmm="The Solution u");
